@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package metricservice_v1;
+
+option go_package = "metricsserviceGRPC/pkg/metricservice_v1;metricservice_v1";
+
+message Metric{
+    string id = 1;
+    string mType = 2;
+    int64 delta = 3;
+    float value = 4;
+
+}
