@@ -11,3 +11,15 @@ message Metric{
     float value = 4;
 
 }
+
+service MetricService{
+    rpc PostV1(MetricReuest) returns (MetricResponce);
+}
+
+message MetricReuest{
+    Metric value = 1;
+}
+
+message MetricResponce{
+    string status = 1;
+}
