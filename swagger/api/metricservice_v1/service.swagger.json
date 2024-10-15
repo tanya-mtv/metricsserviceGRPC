@@ -1,0 +1,117 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api/metricservice_v1/service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "MetricService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/metricservice_v1.MetricService/PostV1": {
+      "post": {
+        "operationId": "MetricService_PostV1",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/metricservice_v1MetricResponce"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/metricservice_v1MetricRequest"
+            }
+          }
+        ],
+        "tags": [
+          "MetricService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "metricservice_v1Metric": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "mType": {
+          "type": "string"
+        },
+        "delta": {
+          "type": "string",
+          "format": "int64"
+        },
+        "value": {
+          "type": "number",
+          "format": "float"
+        }
+      }
+    },
+    "metricservice_v1MetricRequest": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "#/definitions/metricservice_v1Metric"
+        }
+      }
+    },
+    "metricservice_v1MetricResponce": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  }
+}

@@ -2,21 +2,24 @@ syntax = "proto3";
 
 package metricservice_v1;
 
+import "api/metricservice_v1/validate/validate.proto";
+
+
 option go_package = "metricsserviceGRPC/pkg/metricservice_v1;metricservice_v1";
 
 message Metric{
     string id = 1;
-    string mType = 2;
+    string mType = 2 [(validate.rules).string.min_len = 1];
     int64 delta = 3;
     float value = 4;
 
 }
 
 service MetricService{
-    rpc PostV1(MetricReuest) returns (MetricResponce);
+    rpc PostV1(MetricRequest) returns (MetricResponce);
 }
 
-message MetricReuest{
+message MetricRequest{
     Metric value = 1;
 }
 

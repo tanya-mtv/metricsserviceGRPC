@@ -12,8 +12,11 @@ import (
 	"sync"
 	"sync/atomic"
 
+	msV1 "metricsserviceGRPC/pkg/api/metricsserviceGRPC/pkg/metricservice_v1"
+
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
+	"google.golang.org/grpc"
 )
 
 type counter struct {
@@ -34,10 +37,23 @@ func (c *counter) nulValue() {
 }
 
 type ServiceMetrics struct {
-	cfg       *config.ConfigAgent
-	collector metricCollector
-	counter   *counter
-	log       logger.Logger
+	cfg        *config.ConfigAgent
+	collector  metricCollector
+	counter    *counter
+	log        logger.Logger
+	grpcClient msV1.MetricServiceClient
+}
+
+func NewServiceMetrics(collector *repository.MetricRepositoryCollector, cfg *config.ConfigAgent, log logger.Logger, conn *grpc.ClientConn) *ServiceMetrics {
+	return &ServiceMetrics{
+		cfg:       cfg,
+		collector: collector,
+		counter: &counter{
+			num: new(int32),
+		},
+		log:        log,
+		grpcClient: msV1.NewMetricServiceClient(conn),
+	}
 }
 
 func (sm *ServiceMetrics) MetricsMonitor() {
@@ -101,14 +117,30 @@ func (sm *ServiceMetrics) MetricsMonitorGopsutil(ctx context.Context) {
 
 }
 
-func newMetric(metricName, metricsType string) *models.Metrics {
-
-	return &models.Metrics{
-		ID:    metricName,
-		MType: metricsType,
-	}
-}
-
 func (sm *ServiceMetrics) GetAllMetricList() []models.Metrics {
 	return sm.collector.GetAllMetricsList()
+}
+
+func (sm *ServiceMetrics) PostMessage(ctx context.Context, data models.Metrics) {
+
+	m := new(msV1.Metric)
+
+	m.Id = data.ID
+	m.MType = data.MType
+	// m.Delta = *data.Delta
+	m.Delta = rand.Int63()
+	m.Value = rand.Float32()
+	// m.Value = float32(*data.Value)
+
+	resp, err := sm.grpcClient.PostV1(ctx, &msV1.MetricRequest{
+		Value: m,
+	})
+	if err != nil {
+		sm.log.Infoln("Got status ", resp.Status, "error ", err.Error())
+	}
+
+	sm.log.Infoln("Got status ", resp.Status)
+
+	sm.counter.nulValue()
+
 }
