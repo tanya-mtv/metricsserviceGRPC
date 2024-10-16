@@ -17,6 +17,7 @@ import (
 	"github.com/shirou/gopsutil/v3/cpu"
 	"github.com/shirou/gopsutil/v3/mem"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/status"
 )
 
 type counter struct {
@@ -132,14 +133,20 @@ func (sm *ServiceMetrics) PostMessage(ctx context.Context, data models.Metrics) 
 	m.Value = rand.Float32()
 	// m.Value = float32(*data.Value)
 
-	resp, err := sm.grpcClient.PostV1(ctx, &msV1.MetricRequest{
+	_, err := sm.grpcClient.PostV1(ctx, &msV1.MetricRequest{
 		Value: m,
 	})
 	if err != nil {
-		sm.log.Infoln("Got status ", resp.Status, "error ", err.Error())
+
+		if st, ok := status.FromError(err); ok {
+			sm.log.Infoln("Metric %s .Got status %v:%v", m.Id, st.Code(), st)
+			// fmt.Printf()
+		}
+		// return
+
 	}
 
-	sm.log.Infoln("Got status ", resp.Status)
+	// sm.log.Infoln("Got status ", resp.Status)
 
 	sm.counter.nulValue()
 

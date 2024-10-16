@@ -4,6 +4,9 @@ package metricservice_v1;
 
 import "api/metricservice_v1/validate/validate.proto";
 
+import "api/google/api/annotations.proto";
+
+//inport  "api/google/api/https.proto";
 
 option go_package = "metricsserviceGRPC/pkg/metricservice_v1;metricservice_v1";
 
@@ -16,8 +19,15 @@ message Metric{
 }
 
 service MetricService{
-    rpc PostV1(MetricRequest) returns (MetricResponce);
+    rpc PostV1(MetricRequest) returns (MetricResponce){
+        option (google.api.http) = {
+            post: "/v1/PostMetric"
+            body: "*"
+        };
+    };
 }
+
+
 
 message MetricRequest{
     Metric value = 1;

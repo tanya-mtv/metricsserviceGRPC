@@ -18,3 +18,5 @@ docs
 https://habr.com/ru/articles/774796/
 https://eliofery.github.io/blog/2024-02-03-kodogeneraciya-protobuf-fajlov-ispolzuya-plagin-buf-backend.html
 https://github.com/ozonmp/omp-template-api/blob/main/buf.gen.yaml
+
+https://habr.com/ru/articles/658769/

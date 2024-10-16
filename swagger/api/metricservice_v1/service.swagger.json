@@ -16,7 +16,7 @@
     "application/json"
   ],
   "paths": {
-    "/metricservice_v1.MetricService/PostV1": {
+    "/v1/PostMetric": {
       "post": {
         "operationId": "MetricService_PostV1",
         "responses": {

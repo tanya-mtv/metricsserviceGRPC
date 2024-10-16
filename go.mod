@@ -7,11 +7,14 @@ toolchain go1.21.12
 require (
 	github.com/caarlos0/env v3.5.0+incompatible
 	github.com/envoyproxy/protoc-gen-validate v1.1.0
+	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.22.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/lib/pq v1.10.9
 	github.com/shirou/gopsutil/v3 v3.24.5
 	go.uber.org/zap v1.27.0
+	google.golang.org/genproto/googleapis/api v0.0.0-20241015175021-c02fea0c224a
 	google.golang.org/grpc v1.67.1
 	google.golang.org/protobuf v1.35.1
 )

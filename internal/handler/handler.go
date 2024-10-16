@@ -45,13 +45,16 @@ func (g *GRPCServer) PostV1(ctx context.Context, req *msV1.MetricRequest) (*msV1
 	if metric.MType == "gauge" {
 		_, err := g.storage.UpdateGauge(metric.ID, *metric.Value)
 		if err != nil {
-			g.log.Info("Cannot put gauge data to DB")
+			g.log.Info("Cannot put gauge data to DB", err)
 			return nil, status.Error(codes.Canceled, err.Error())
 		}
 	} else {
 		_, err := g.storage.UpdateCounter("counter", *metric.Delta)
-		g.log.Info("Cannot put gauge data to DB")
-		return nil, status.Error(codes.Canceled, err.Error())
+		if err != nil {
+			g.log.Info("Cannot put counter data to DB", err)
+			return nil, status.Error(codes.Canceled, err.Error())
+		}
+
 	}
 
 	res := &msV1.MetricResponce{
